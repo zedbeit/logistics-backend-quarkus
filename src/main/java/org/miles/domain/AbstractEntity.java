@@ -16,7 +16,7 @@ public abstract class AbstractEntity implements Serializable  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    private Long id;
+    protected Long id;
     
     @Column(name = "created_date", updatable = false)
     @JsonIgnore 
