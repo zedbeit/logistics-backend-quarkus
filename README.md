@@ -55,46 +55,4 @@ REST is easy peasy with this Hello World RESTEasy resource.
 [Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
 
 ## Contribution guides
-
-### How to use Story Types
-### Understanding the kind of changes you've made
-
-* Features change something about your product.
-* Bugs are simply things that are broken.
-* Chores are the things you have to do that don’t actually change your product.<br/>*Read more* [here](https://clubhouse.io/blog/how-and-why-to-use-story-types-851eb651c81d/)
-
-### Branch and Commit message naming convention
-
-##### Branch Naming
-Branches created should be named using the following format:<br/>
-`{story type}-{2-3 word summary}`
-
-`story-type` - Indicates the context of the branch and should be one of:
-* ft == Feature
-* bg == Bug
-* ch == Chore
-* rf == Refactor
-
-`story-summary` - Short 2-3 words summary about what the branch contains<br/>
-
-Example of a feature branch: `ft-responsive-mobile-layout`
-
-##### Commits
-Format:<br>
-`<type>(<scope>): <subject>``<BLANK LINE> <body> <BLANK LINE> <footer>`
-
-`<type>` should be:
-* feature
-* bug
-* chore
-* refactor
-* documentation
-
-`<scope>` should be something specific to the commit change.
-Example of a commit message:
-`feature(logo): add logo to the toolbar`<br>
-
-### Recommended Git Workflow
-
-You are required to create a separate branch using the naming convention above for each change you made and then merge
-into the develop branch. [Click here](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) for a good guide to getting yourself familiar with the git workflow.
+All contributions should be made on a new branch.
