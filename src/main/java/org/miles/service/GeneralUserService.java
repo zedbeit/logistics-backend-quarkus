@@ -52,9 +52,5 @@ public class GeneralUserService {
         return generalUser;
     }
 
-    @Transactional
-    public GeneralUserDTO updateToDto(GeneralUserDTO generalUserDto,String userId) {
-        return generalUserMapper.toDto(createGeneralUser(generalUserDto, userId));
-    }
 
 }
