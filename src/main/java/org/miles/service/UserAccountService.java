@@ -14,11 +14,8 @@ import org.miles.repository.AuthorityRepository;
 import org.miles.repository.CompanyRepository;
 import org.miles.repository.GeneralUserRepository;
 import org.miles.repository.UserAccountRepository;
-import org.miles.service.dto.CompanyDTO;
 import org.miles.service.dto.UserAccountDTO;
-import org.miles.service.dto.vm.CompanyVM;
 import org.miles.service.dto.vm.UserAccountVM;
-import org.miles.service.mapper.CompanyVmMapper;
 import org.miles.service.mapper.UserAccountMapper;
 import org.miles.service.mapper.UserAccountVmMapper;
 
@@ -31,9 +28,6 @@ public class UserAccountService {
     
     @Inject
     UserAccountVmMapper userAccountVmMapper;
-    
-    @Inject 
-    CompanyVmMapper companyVmMapper; 
     
     @Inject
     UserAccountRepository userAccountRepository;

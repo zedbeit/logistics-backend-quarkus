@@ -9,9 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.miles.service.UserAccountService;
-import org.miles.service.dto.CompanyDTO;
 import org.miles.service.dto.UserAccountDTO;
-import org.miles.service.dto.vm.CompanyVM;
 import org.miles.service.dto.vm.UserAccountVM;
 
 @Path("account")
@@ -29,9 +27,9 @@ public class UserAccountResource {
     
     @POST
     @Path("/generaluser-signup")
-    public Response signUpForUser(UserAccountVM userAccount) {
-        UserAccountDTO user = userAccountService.createGeneralUser(userAccount);
-        return Response.status(Response.Status.CREATED).entity(user).build();
+    public Response signUpForUser(UserAccountVM userAccountVM) {
+        UserAccountDTO userAccount = userAccountService.createGeneralUser(userAccountVM);
+        return Response.status(Response.Status.CREATED).entity(userAccount).build();
     }
     
     @POST
