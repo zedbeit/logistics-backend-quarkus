@@ -36,8 +36,8 @@ public class UserAccountResource {
     
     @POST
     @Path("/company-signup")
-    public Response signUpForCompany(CompanyVM companyVM) {
-        CompanyDTO company = userAccountService.createCompany(companyVM);
-        return Response.status(Response.Status.CREATED).entity(company).build();
+    public Response signUpForCompany(UserAccountVM userAccountVM) {
+        UserAccountDTO userAccount = userAccountService.createCompany(userAccountVM);
+        return Response.status(Response.Status.CREATED).entity(userAccount).build();
     }
 }

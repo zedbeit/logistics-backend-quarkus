@@ -5,17 +5,20 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import org.jboss.logging.Logger;
 import org.miles.domain.Authority;
+import org.miles.domain.Company;
 import org.miles.domain.GeneralUser;
 import org.miles.domain.UserAccount;
 import org.miles.enumeration.Authorities;
 import org.miles.enumeration.UserAccountStatus;
 import org.miles.repository.AuthorityRepository;
+import org.miles.repository.CompanyRepository;
 import org.miles.repository.GeneralUserRepository;
 import org.miles.repository.UserAccountRepository;
 import org.miles.service.dto.CompanyDTO;
 import org.miles.service.dto.UserAccountDTO;
 import org.miles.service.dto.vm.CompanyVM;
 import org.miles.service.dto.vm.UserAccountVM;
+import org.miles.service.mapper.CompanyVmMapper;
 import org.miles.service.mapper.UserAccountMapper;
 import org.miles.service.mapper.UserAccountVmMapper;
 
@@ -29,6 +32,9 @@ public class UserAccountService {
     @Inject
     UserAccountVmMapper userAccountVmMapper;
     
+    @Inject 
+    CompanyVmMapper companyVmMapper; 
+    
     @Inject
     UserAccountRepository userAccountRepository;
     
@@ -37,6 +43,9 @@ public class UserAccountService {
     
     @Inject
     GeneralUserRepository generalUserRepository;
+    
+    @Inject
+    CompanyRepository companyRepository;
     
     @Transactional
     public UserAccountDTO createGeneralUser(UserAccountVM userAccountDTO){
@@ -68,7 +77,33 @@ public class UserAccountService {
         return userAccountMapper.toDto(userAccount);
     }
     
-    public CompanyDTO createCompany(CompanyVM companyVM){
-        return null;
+    @Transactional
+    public UserAccountDTO createCompany(UserAccountVM userAccountVM){
+        String companyName = userAccountVM.companyName;
+        
+        UserAccount userAccount = userAccountVmMapper.toEntity(userAccountVM);
+        
+        Authority authority = authorityRepository.findByName(Authorities.ROLE_COMPANY.toString())  
+                .orElseThrow(IllegalStateException::new);
+        userAccount.addRoles(authority);
+        
+        userAccount.setIsEmailVerified(Boolean.FALSE);
+        userAccount.setStatus(UserAccountStatus.ACTIVE);
+        
+        // The secretKey will be useful when we are doing encryption.
+        // for now its just some dummy text.
+        userAccount.setSecretKey("djadandn");
+        
+        userAccountRepository.persist(userAccount);
+        
+        // Create comapny instance
+        Company company = new Company();
+        company.setCompanyName(companyName);
+        company.setId(userAccount.getId());
+        company.setUserAccount(userAccount);
+        
+        companyRepository.persist(company);
+        
+        return userAccountMapper.toDto(userAccount);
     }
 }
