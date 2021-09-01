@@ -1,5 +1,7 @@
 package org.miles.service.dto.vm;
 
-public class UserAccountVM {
+import org.miles.service.dto.UserAccountDTO;
+
+public class UserAccountVM extends UserAccountDTO {
     public String password;
 }

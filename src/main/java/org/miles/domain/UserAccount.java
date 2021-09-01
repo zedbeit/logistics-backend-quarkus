@@ -21,12 +21,15 @@ public class UserAccount extends AbstractEntity {
     @NotNull
     private String email;
     
+    @NotNull
     @Column(name = "first_name")
     private String firstName;
     
+    @NotNull
     @Column(name = "last_name")
     private String lastName;
     
+    @NotNull
     private String password;
     
     @Column(name = "is_email_verified")
@@ -109,9 +112,22 @@ public class UserAccount extends AbstractEntity {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
+    
+    public void addRoles(Authority role) {
+        authorities.add(role);
+    }
 
+    public void removeRoles(Authority role) {
+        authorities.remove(role);
+    }
+    
+//    @Override
+//    public String toString() {
+//        return "UserAccount{" + "email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", isEmailVerified=" + isEmailVerified + ", status=" + status + ", secretKey=" + secretKey + ", authorities=" + authorities + '}';
+//    }   
+    
     @Override
     public String toString() {
-        return "UserAccount{" + "email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", isEmailVerified=" + isEmailVerified + ", status=" + status + ", secretKey=" + secretKey + ", authorities=" + authorities + '}';
-    }   
+        return "UserAccount{" + "email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", isEmailVerified=" + isEmailVerified + ", status=" + status + ", authorities=" + authorities + '}';
+    }
 }
