@@ -13,6 +13,7 @@ import org.miles.lang.exception.PreconditionFailedException;
 import org.miles.lang.exception.UnAuthorizedException;
 import org.miles.lang.representation.UserAccountRepresentation;
 import org.miles.repository.UserAccountRepository;
+import org.miles.security.service.SecurityUtils;
 
 @RequestScoped
 public class LoginService {
@@ -21,19 +22,25 @@ public class LoginService {
     @Inject
     UserAccountRepository userAccountRepository;
     
-    public Response login(String username, String password ) {
+    @Inject
+    SecurityUtils securityUtils; 
+    
+    public Response login(String email, String plainTextPassword) {
         
-        if (username == null || username.isBlank() || password == null || password.isBlank()) {
-            throw new PreconditionFailedException("Username and Password are required");
+        if (email == null || email.isBlank() || plainTextPassword == null || plainTextPassword.isBlank()) {
+            throw new PreconditionFailedException("Email and Password are required");
         }
+        Optional<UserAccount> user = userAccountRepository.findActiveUserAccountByEmail(email);
         
-        Optional<UserAccount> user = userAccountRepository.findActiveUserAccountByEmailAndPassword(username, password);
         if (user.isEmpty()) {
-            throw new UnAuthorizedException("Invalid username or password");
+            throw new UnAuthorizedException("Invalid email");
         }
         
         UserAccount userAccount = user.get();
         
+        if(!securityUtils.passwordsMatch(userAccount.getPassword(), userAccount.getSecretKey(), plainTextPassword)){
+            throw new UnAuthorizedException("Password is incorrect");
+        }
         return Response.ok(new UserAccountRepresentation(userAccount)).build();
     }
 }
