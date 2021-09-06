@@ -19,4 +19,12 @@ public class UserAccountRepository implements PanacheRepository<UserAccount> {
         
         return find("email = :email and password = :password and status = :status", params).firstResultOptional();  
     }
+    
+    public Optional<UserAccount> findActiveUserAccountByEmail(String email){
+        Map<String, Object> params = new HashMap<>();        
+        params.put("email", email);
+        params.put("status", UserAccountStatus.ACTIVE);
+        
+        return find("email = :email and status = :status", params).firstResultOptional();  
+    }
 }

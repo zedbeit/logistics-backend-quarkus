@@ -1,5 +1,6 @@
 package org.miles.service;
 
+import java.util.Map;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -14,6 +15,7 @@ import org.miles.repository.AuthorityRepository;
 import org.miles.repository.CompanyRepository;
 import org.miles.repository.GeneralUserRepository;
 import org.miles.repository.UserAccountRepository;
+import org.miles.security.service.SecurityUtils;
 import org.miles.service.dto.UserAccountDTO;
 import org.miles.service.dto.vm.UserAccountVM;
 import org.miles.service.mapper.UserAccountMapper;
@@ -41,6 +43,9 @@ public class UserAccountService {
     @Inject
     CompanyRepository companyRepository;
     
+    @Inject
+    SecurityUtils securityUtils;
+    
     @Transactional
     public UserAccountDTO createGeneralUser(UserAccountVM userAccountDTO){
         
@@ -48,15 +53,15 @@ public class UserAccountService {
         
         Authority authority = authorityRepository.findByName(Authorities.ROLE_GENERAL_USER.toString())  
                 .orElseThrow(IllegalStateException::new);
-
         userAccount.addRoles(authority);
+
+        Map<String, String> credMap = securityUtils.hashPassword(userAccount.getPassword());
         
+        userAccount.setPassword(credMap.get("hashedPassword"));
+        userAccount.setSecretKey(credMap.get("salt"));
+       
         userAccount.setIsEmailVerified(Boolean.FALSE);
         userAccount.setStatus(UserAccountStatus.ACTIVE);
-        
-        // The secretKey will be useful when we are doing encryption.
-        // for now its just some dummy text.
-        userAccount.setSecretKey("djadandn");
         
         userAccountRepository.persist(userAccount);
         
@@ -68,6 +73,8 @@ public class UserAccountService {
         
         generalUserRepository.persist(generalUser);
        
+        credMap = null;
+        
         return userAccountMapper.toDto(userAccount);
     }
     
@@ -77,16 +84,17 @@ public class UserAccountService {
         
         UserAccount userAccount = userAccountVmMapper.toEntity(userAccountVM);
         
+        Map<String, String> credMap = securityUtils.hashPassword(userAccount.getPassword());
+        
+        userAccount.setPassword(credMap.get("hashedPassword"));
+        userAccount.setSecretKey(credMap.get("salt"));
+        
         Authority authority = authorityRepository.findByName(Authorities.ROLE_COMPANY.toString())  
                 .orElseThrow(IllegalStateException::new);
         userAccount.addRoles(authority);
         
         userAccount.setIsEmailVerified(Boolean.FALSE);
         userAccount.setStatus(UserAccountStatus.ACTIVE);
-        
-        // The secretKey will be useful when we are doing encryption.
-        // for now its just some dummy text.
-        userAccount.setSecretKey("djadandn");
         
         userAccountRepository.persist(userAccount);
         
@@ -97,7 +105,7 @@ public class UserAccountService {
         company.setUserAccount(userAccount);
         
         companyRepository.persist(company);
-        
+        credMap = null;
         return userAccountMapper.toDto(userAccount);
     }
 }
