@@ -2,12 +2,12 @@ package org.miles.lang.exception;
 
 import javax.ws.rs.BadRequestException;
 
-public class InvalidRequestException extends BadRequestException {
-    public InvalidRequestException(){
-        super("INVALID_REQUEST_EXCEPTION");
+public class EmailAlreadyExistException extends BadRequestException {
+    public EmailAlreadyExistException(String message){
+        super(message);
     }
 
-    public InvalidRequestException(String message){
-        super(message);
+    public EmailAlreadyExistException(){
+        super("EMAIL_ALREADY_EXIST");
     }
 }

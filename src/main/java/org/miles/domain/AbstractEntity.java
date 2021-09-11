@@ -15,7 +15,6 @@ import org.miles.lang.utils.DateUtils;
 public abstract class AbstractEntity implements Serializable  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     protected Long id;
     
     @Column(name = "created_date", updatable = false)

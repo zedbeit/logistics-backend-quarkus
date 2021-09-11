@@ -11,6 +11,8 @@ import org.miles.domain.GeneralUser;
 import org.miles.domain.UserAccount;
 import org.miles.enumeration.Authorities;
 import org.miles.enumeration.UserAccountStatus;
+import org.miles.lang.exception.EmailAlreadyExistException;
+import org.miles.lang.exception.PreconditionFailedException;
 import org.miles.repository.AuthorityRepository;
 import org.miles.repository.CompanyRepository;
 import org.miles.repository.GeneralUserRepository;
@@ -48,13 +50,19 @@ public class UserAccountService {
     
     @Transactional
     public UserAccountDTO createGeneralUser(UserAccountVM userAccountDTO){
+        if (userAccountDTO == null || userAccountDTO.password == null || userAccountDTO.email == null || userAccountDTO.firstName == null || userAccountDTO.lastName == null) {
+            throw new PreconditionFailedException("Email, First name, Last name, Password must be provided");
+        }
+        if(userAccountDTO.password.length() < 8){
+            throw new PreconditionFailedException("Password must be atleast 8 characters");
+        }
+        
+        if (userAccountRepository.findActiveUserAccountByEmail(userAccountDTO.email).isPresent()) {
+            throw new EmailAlreadyExistException("Email Already exist");
+        }
         
         UserAccount userAccount = userAccountVmMapper.toEntity(userAccountDTO);
         
-        Authority authority = authorityRepository.findByName(Authorities.ROLE_GENERAL_USER.toString())  
-                .orElseThrow(IllegalStateException::new);
-        userAccount.addRoles(authority);
-
         Map<String, String> credMap = securityUtils.hashPassword(userAccount.getPassword());
         
         userAccount.setPassword(credMap.get("hashedPassword"));
@@ -62,6 +70,11 @@ public class UserAccountService {
        
         userAccount.setIsEmailVerified(Boolean.FALSE);
         userAccount.setStatus(UserAccountStatus.ACTIVE);
+        
+//        Authority authority = authorityRepository.findByName(Authorities.ROLE_GENERAL_USER.toString())  
+//        .orElseThrow(IllegalStateException::new);
+//        userAccount.addRoles(authority);
+
         
         userAccountRepository.persist(userAccount);
         

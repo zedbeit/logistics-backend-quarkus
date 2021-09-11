@@ -15,6 +15,7 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.miles.lang.utils.DateUtils;
 
@@ -24,6 +25,7 @@ public class GeneralUser implements Serializable{
     private static final long serialVersionUID = 1L;
     
     @Id
+    @NotNull(message = "Id must be set")
     private Long id;
     
     @Size(max = 255)

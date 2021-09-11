@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import org.miles.enumeration.UserAccountStatus;
 
@@ -18,28 +20,27 @@ import org.miles.enumeration.UserAccountStatus;
 public class UserAccount extends AbstractEntity {
     private static final long serialVersionUID = 1L;
     
-    @NotNull
+    @Email(message = "Email must be in the form user@domain.com")
     private String email;
     
-    @NotNull
+    @NotEmpty(message = "Name cannot be empty")
     @Column(name = "first_name")
     private String firstName;
     
-    @NotNull
+    @NotEmpty(message = "Name cannot be empty")
     @Column(name = "last_name")
     private String lastName;
     
-    @NotNull
     private String password;
     
     @Column(name = "is_email_verified")
     private Boolean isEmailVerified;
     
-    @NotNull
+    @NotNull(message = "Status must be set")
     @Enumerated(EnumType.STRING)
     private UserAccountStatus status;
     
-    @NotNull
+    @NotNull(message = "Secret key must be set.")
     @Column(name = "secret_key")
     private String secretKey;
     

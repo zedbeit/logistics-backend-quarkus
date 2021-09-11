@@ -15,6 +15,11 @@ public class BaseRepresentation {
         this.status = status;
         this.data = data;
     }
+    
+     public BaseRepresentation(int status, Object data){
+        this.status = status;
+        this.data = data;
+    }
 
     public String getMessage() {
         return message;
