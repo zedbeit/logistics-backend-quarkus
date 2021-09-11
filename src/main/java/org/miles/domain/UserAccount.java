@@ -122,11 +122,6 @@ public class UserAccount extends AbstractEntity {
         authorities.remove(role);
     }
     
-//    @Override
-//    public String toString() {
-//        return "UserAccount{" + "email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", isEmailVerified=" + isEmailVerified + ", status=" + status + ", secretKey=" + secretKey + ", authorities=" + authorities + '}';
-//    }   
-    
     @Override
     public String toString() {
         return "UserAccount{" + "email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", isEmailVerified=" + isEmailVerified + ", status=" + status + ", authorities=" + authorities + '}';
