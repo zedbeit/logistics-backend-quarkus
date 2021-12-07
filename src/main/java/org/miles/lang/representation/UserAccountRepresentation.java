@@ -8,7 +8,7 @@ public class UserAccountRepresentation {
     public Instant createdOn;
     
     public UserAccountRepresentation(UserAccount userAccount) {
-        email = userAccount.getEmail();
-        createdOn = userAccount.getCreatedDate();
+        email = userAccount.email;
+        createdOn = userAccount.createdDate;
     }
 }

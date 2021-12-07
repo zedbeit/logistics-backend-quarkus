@@ -64,25 +64,25 @@ public class UserAccountService {
         
         UserAccount userAccount = userAccountVmMapper.toEntity(userAccountDTO);
         
-        Map<String, String> credMap = securityUtils.hashPassword(userAccount.getPassword());
+        Map<String, String> credMap = securityUtils.hashPassword(userAccount.password);
         
-        userAccount.setPassword(credMap.get("hashedPassword"));
-        userAccount.setSecretKey(credMap.get("salt"));
+        userAccount.password = credMap.get("hashedPassword");
+        userAccount.secretKey = credMap.get("salt");
        
-        userAccount.setIsEmailVerified(Boolean.FALSE);
-        userAccount.setStatus(UserAccountStatus.ACTIVE);
+        userAccount.isEmailVerified = Boolean.FALSE;
+        userAccount.status = UserAccountStatus.ACTIVE;
         
-        Authority authority = authorityRepository.findByName(Authorities.ROLE_GENERAL_USER.toString())  
-        .orElseThrow(IllegalStateException::new);
-        userAccount.addRoles(authority);
+        // Authority authority = authorityRepository.findByName(Authorities.ROLE_GENERAL_USER.toString())  
+        // .orElseThrow(IllegalStateException::new);
+        // userAccount.addRoles(authority);
         
         userAccountRepository.persist(userAccount);
         
         // Create general user instance
         GeneralUser generalUser = new GeneralUser();
         
-        generalUser.setId(userAccount.getId());
-        generalUser.setUserAccount(userAccount);
+        generalUser.id = userAccount.id;
+        generalUser.userAccount = userAccount;
         
         generalUserRepository.persist(generalUser);
        
@@ -115,25 +115,25 @@ public class UserAccountService {
         
         UserAccount userAccount = userAccountVmMapper.toEntity(userAccountDTO);
         
-        Map<String, String> credMap = securityUtils.hashPassword(userAccount.getPassword());
+        Map<String, String> credMap = securityUtils.hashPassword(userAccount.password);
         
-        userAccount.setPassword(credMap.get("hashedPassword"));
-        userAccount.setSecretKey(credMap.get("salt"));
+        userAccount.password = credMap.get("hashedPassword");
+        userAccount.secretKey = credMap.get("salt");
         
         Authority authority = authorityRepository.findByName(Authorities.ROLE_COMPANY.toString())  
                 .orElseThrow(IllegalStateException::new);
         userAccount.addRoles(authority);
         
-        userAccount.setIsEmailVerified(Boolean.FALSE);
-        userAccount.setStatus(UserAccountStatus.ACTIVE);
+        userAccount.isEmailVerified = Boolean.FALSE;
+        userAccount.status = UserAccountStatus.ACTIVE;
         
         userAccountRepository.persist(userAccount);
         
         // Create comapny instance
         Company company = new Company();
-        company.setCompanyName(companyName);
-        company.setId(userAccount.getId());
-        company.setUserAccount(userAccount);
+        company.companyName = companyName;
+        company.id = userAccount.id;
+        company.userAccount = userAccount;
         
         companyRepository.persist(company);
         credMap = null;

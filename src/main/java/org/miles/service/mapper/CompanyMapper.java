@@ -29,7 +29,7 @@ public interface CompanyMapper extends EntityMapper<CompanyDTO, Company>{
             return null;
         }
         Company company = new Company();
-        company.setId(id);
+        company.id = id;
         return company;
     }
 }
