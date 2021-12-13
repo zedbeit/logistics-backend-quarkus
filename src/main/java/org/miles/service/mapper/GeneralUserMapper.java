@@ -26,7 +26,7 @@ public interface GeneralUserMapper extends EntityMapper<GeneralUserDTO, GeneralU
             return null;
         }
         GeneralUser generalUser = new GeneralUser();
-        generalUser.setId(id);
+        generalUser.id = id;
         return generalUser;
     }
 }

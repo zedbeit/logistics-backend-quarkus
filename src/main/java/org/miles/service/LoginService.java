@@ -38,7 +38,7 @@ public class LoginService {
         
         UserAccount userAccount = user.get();
         
-        if(!securityUtils.passwordsMatch(userAccount.getPassword(), userAccount.getSecretKey(), plainTextPassword)){
+        if(!securityUtils.passwordsMatch(userAccount.password, userAccount.secretKey, plainTextPassword)){
             throw new UnAuthorizedException("Password is incorrect");
         }
         return Response.ok(new UserAccountRepresentation(userAccount)).build();

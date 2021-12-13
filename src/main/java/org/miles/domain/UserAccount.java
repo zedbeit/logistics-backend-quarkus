@@ -1,118 +1,94 @@
 package org.miles.domain;
 
+import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.miles.enumeration.UserAccountStatus;
+import org.miles.lang.utils.DateUtils;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "user_account")
-public class UserAccount extends AbstractEntity {
+public class UserAccount implements Serializable {
     private static final long serialVersionUID = 1L;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
     @Email(message = "Email must be in the form user@domain.com")
-    private String email;
+    public String email;
     
     @NotEmpty(message = "Name cannot be empty")
     @Column(name = "first_name")
-    private String firstName;
+    public String firstName;
     
     @NotEmpty(message = "Name cannot be empty")
     @Column(name = "last_name")
-    private String lastName;
+    public String lastName;
     
-    private String password;
+    public String password;
+
+    @Column(name = "phone_number")
+    public String phoneNumber;
     
     @Column(name = "is_email_verified")
-    private Boolean isEmailVerified;
+    public Boolean isEmailVerified;
     
     @NotNull(message = "Status must be set")
     @Enumerated(EnumType.STRING)
-    private UserAccountStatus status;
+    public UserAccountStatus status;
     
     @NotNull(message = "Secret key must be set.")
     @Column(name = "secret_key")
-    private String secretKey;
+    public String secretKey;
     
     @ManyToMany
     @JoinTable(name = "user_account_authority",
             joinColumns = {@JoinColumn(name = "user_account_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
-    private Set<Authority> authorities = new HashSet<>();
+    public Set<Authority> authorities = new HashSet<>();
 
-    public String getEmail() {
-        return email;
-    }
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "userAccount", fetch = FetchType.LAZY)
+    public GeneralUser generalUser;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "userAccount", fetch = FetchType.LAZY)
+    public Company company;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getIsEmailVerified() {
-        return isEmailVerified;
-    }
-
-    public void setIsEmailVerified(Boolean isEmailVerified) {
-        this.isEmailVerified = isEmailVerified;
-    }
-
-    public UserAccountStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserAccountStatus status) {
-        this.status = status;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
+    @Column(name = "created_date", updatable = false)
+    @JsonIgnore 
+    public Instant createdDate = DateUtils.currentInstant();
+    
+    @Column(name = "last_modified_date")
+    @JsonIgnore
+    public Instant lastModifiedDate = DateUtils.currentInstant();
     
     public void addRoles(Authority role) {
         authorities.add(role);
@@ -120,10 +96,5 @@ public class UserAccount extends AbstractEntity {
 
     public void removeRoles(Authority role) {
         authorities.remove(role);
-    }
-    
-    @Override
-    public String toString() {
-        return "UserAccount{" + "email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", isEmailVerified=" + isEmailVerified + ", status=" + status + ", authorities=" + authorities + '}';
     }
 }
