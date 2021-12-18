@@ -72,20 +72,20 @@ public class UserAccountService {
         userAccount.isEmailVerified = Boolean.FALSE;
         userAccount.status = UserAccountStatus.ACTIVE;
         
-        // Authority authority = authorityRepository.findByName(Authorities.ROLE_GENERAL_USER.toString())  
-        // .orElseThrow(IllegalStateException::new);
-        // userAccount.addRoles(authority);
-        
+        Authority authority = authorityRepository.findByName(Authorities.ROLE_GENERAL_USER.toString())  
+        .orElseThrow(IllegalStateException::new);
+        userAccount.addRoles(authority);
+       
         userAccountRepository.persist(userAccount);
         
         // Create general user instance
         GeneralUser generalUser = new GeneralUser();
         
-        generalUser.id = userAccount.id;
+        generalUser.id = userAccount.getId();
         generalUser.userAccount = userAccount;
         
         generalUserRepository.persist(generalUser);
-       
+
         credMap = null;
         
         return userAccountMapper.toDto(userAccount);
@@ -132,7 +132,7 @@ public class UserAccountService {
         // Create comapny instance
         Company company = new Company();
         company.companyName = companyName;
-        company.id = userAccount.id;
+        company.id = userAccount.getId();
         company.userAccount = userAccount;
         
         companyRepository.persist(company);

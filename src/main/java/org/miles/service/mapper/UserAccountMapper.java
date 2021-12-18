@@ -26,7 +26,7 @@ public interface UserAccountMapper extends EntityMapper<UserAccountDTO, UserAcco
             return null;
         }
         UserAccount userAccount = new UserAccount();
-        userAccount.id = id;
+        userAccount.setId(id);
         return userAccount;
     }      
 }
