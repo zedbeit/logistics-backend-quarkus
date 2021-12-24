@@ -18,7 +18,7 @@ import org.miles.repository.AuthorityRepository;
 import org.miles.repository.CompanyRepository;
 import org.miles.repository.GeneralUserRepository;
 import org.miles.repository.UserAccountRepository;
-import org.miles.security.service.SecurityUtils;
+import org.miles.security.util.SecurityUtils;
 import org.miles.service.dto.UserAccountDTO;
 import org.miles.service.dto.vm.UserAccountVM;
 import org.miles.service.mapper.UserAccountMapper;
@@ -46,9 +46,6 @@ public class UserAccountService {
     @Inject
     CompanyRepository companyRepository;
     
-    @Inject
-    SecurityUtils securityUtils;
-    
     @Transactional
     public UserAccountDTO createGeneralUser(UserAccountVM userAccountDTO){
         if (userAccountDTO == null || userAccountDTO.password == null || userAccountDTO.email == null || userAccountDTO.firstName == null || userAccountDTO.lastName == null) {
@@ -64,7 +61,7 @@ public class UserAccountService {
         
         UserAccount userAccount = userAccountVmMapper.toEntity(userAccountDTO);
         
-        Map<String, String> credMap = securityUtils.hashPassword(userAccount.password);
+        Map<String, String> credMap = SecurityUtils.hashPassword(userAccount.password);
         
         userAccount.password = credMap.get("hashedPassword");
         userAccount.secretKey = credMap.get("salt");
@@ -115,7 +112,7 @@ public class UserAccountService {
         
         UserAccount userAccount = userAccountVmMapper.toEntity(userAccountDTO);
         
-        Map<String, String> credMap = securityUtils.hashPassword(userAccount.password);
+        Map<String, String> credMap = SecurityUtils.hashPassword(userAccount.password);
         
         userAccount.password = credMap.get("hashedPassword");
         userAccount.secretKey = credMap.get("salt");
@@ -136,6 +133,7 @@ public class UserAccountService {
         company.userAccount = userAccount;
         
         companyRepository.persist(company);
+        
         credMap = null;
         return userAccountMapper.toDto(userAccount);
     }
