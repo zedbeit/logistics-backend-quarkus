@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.miles.security.service;
+package org.miles.security.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,15 +13,15 @@ import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.apache.shiro.util.ByteSource;
 
-@RequestScoped
+// @RequestScoped
 public class SecurityUtils {
-    public boolean passwordsMatch(String dbStoredHashedPassword, String saltText, String clearTextPassword) {
+    public static boolean passwordsMatch(String dbStoredHashedPassword, String saltText, String clearTextPassword) {
         ByteSource salt = ByteSource.Util.bytes(Hex.decode(saltText));
         String hashedPassword = hashAndSaltPassword(clearTextPassword, salt);
         return hashedPassword.equals(dbStoredHashedPassword);
     }
     
-    public Map<String, String> hashPassword(String clearTextPassword) {
+    public static Map<String, String> hashPassword(String clearTextPassword) {
         ByteSource salt = getSalt();
 
         Map<String, String> credMap = new HashMap<>();
@@ -30,11 +30,11 @@ public class SecurityUtils {
         return credMap;
     }
     
-    private String hashAndSaltPassword(String clearTextPassword, ByteSource salt) {
+    private static String hashAndSaltPassword(String clearTextPassword, ByteSource salt) {
         return new Sha512Hash(clearTextPassword, salt, 2000000).toHex();
     }
 
-    private ByteSource getSalt() {
+    private static ByteSource getSalt() {
         return new SecureRandomNumberGenerator().nextBytes();
     }
 }

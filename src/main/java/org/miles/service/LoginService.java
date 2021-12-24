@@ -1,5 +1,6 @@
 package org.miles.service;
 
+import io.vertx.core.json.JsonObject;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,7 +14,8 @@ import org.miles.lang.exception.PreconditionFailedException;
 import org.miles.lang.exception.UnAuthorizedException;
 import org.miles.lang.representation.UserAccountRepresentation;
 import org.miles.repository.UserAccountRepository;
-import org.miles.security.service.SecurityUtils;
+import org.miles.security.service.TokenService;
+import org.miles.security.util.SecurityUtils;
 
 @RequestScoped
 public class LoginService {
@@ -23,8 +25,8 @@ public class LoginService {
     UserAccountRepository userAccountRepository;
     
     @Inject
-    SecurityUtils securityUtils; 
-    
+    TokenService tokenService;
+     
     public Response login(String email, String plainTextPassword) {
         
         if (email == null || email.isBlank() || plainTextPassword == null || plainTextPassword.isBlank()) {
@@ -38,10 +40,20 @@ public class LoginService {
         
         UserAccount userAccount = user.get();
         
-        if(!securityUtils.passwordsMatch(userAccount.password, userAccount.secretKey, plainTextPassword)){
+        if(!SecurityUtils.passwordsMatch(userAccount.password, userAccount.secretKey, plainTextPassword)){
             throw new UnAuthorizedException("Password is incorrect");
         }
-        return Response.ok(new UserAccountRepresentation(userAccount)).build();
+        
+        Set<String> roles = userAccount.authorities.stream()
+            .map(Authority::getName)
+            .collect(Collectors.toSet());
+        
+        JsonObject token = tokenService.generateToken(email, roles);
+        
+        return Response.ok(new UserAccountRepresentation(userAccount))
+            .header("accessToken", token.getValue("accessToken"))
+            .header("expiresAt", token.getValue("expiresAt"))
+            .build();
     }
 }
 
