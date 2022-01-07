@@ -2,9 +2,9 @@ package org.miles.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import javax.enterprise.context.ApplicationScoped;
-import org.miles.domain.State;
+import org.miles.domain.Location;
 
 @ApplicationScoped
-public class StateRepository implements PanacheRepository<State> {
+public class LocationRepository implements PanacheRepository<Location> {
     
 }
