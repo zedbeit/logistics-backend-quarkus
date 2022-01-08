@@ -15,7 +15,7 @@ public interface RouteMapper extends EntityMapper<RouteDTO, Route>{
     @Mapping(target="createdDate",ignore=true)
     @Mapping(target="lastModifiedDate",ignore=true)
     @Mapping(target="id",ignore=true)
-    @Mapping(target="state",ignore=true)
+    @Mapping(target="location",ignore=true)
     public Route toEntity(RouteDTO dto);
     
     default Route fromId(Long id){

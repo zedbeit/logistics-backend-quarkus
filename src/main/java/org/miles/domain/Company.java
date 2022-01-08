@@ -69,7 +69,7 @@ public class Company implements Serializable {
     public UserAccount userAccount;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
-    public List<State> states;
+    public List<Location> locations;
     
     @Column(name = "created_date", updatable = false)
     @JsonIgnore 

@@ -21,7 +21,7 @@ public interface CompanyMapper extends EntityMapper<CompanyDTO, Company>{
     @Mapping(target="ratings",ignore=true)
     @Mapping(target="vehicles",ignore=true)
     @Mapping(target="userAccount",ignore=true)
-    @Mapping(target="states",ignore=true)
+    @Mapping(target="locations",ignore=true)
     public Company toEntity(CompanyDTO dto);
     
     default Company fromId(Long id){

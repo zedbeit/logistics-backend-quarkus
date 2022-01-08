@@ -3,6 +3,8 @@ package org.miles.resource;
 import io.vertx.core.json.JsonObject;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,6 +16,9 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.hibernate.annotations.SourceType;
+import org.miles.domain.GeneralUser;
+import org.miles.repository.GeneralUserRepository;
 import org.miles.security.service.TokenService;
 import org.miles.service.UserAccountService;
 import org.miles.service.dto.UserAccountDTO;
@@ -30,6 +35,9 @@ public class UserAccountResource {
     @Inject
     TokenService ts;
     
+    @Inject
+    GeneralUserRepository generalUserRepository;
+    
     @GET
     @Path("/test")
     public Response testEndpoint(){
@@ -37,6 +45,7 @@ public class UserAccountResource {
 //        JsonObject token = ts.generateToken("zaheedbeita@gmail.com",new HashSet<>(Arrays.asList("User", "Admin")));
 //        ts.generateToken("Zaheedbeita@gmail.com", new HashSet<>(Arrays.asList("User", "Admin")));
 //        return Response.ok(token).build();
+
         return Response.ok("Testing").build();
     }    
     

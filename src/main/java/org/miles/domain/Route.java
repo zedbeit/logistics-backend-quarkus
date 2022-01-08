@@ -17,8 +17,8 @@ public class Route extends AbstractEntity {
     private String name;
     
     @ManyToOne
-    @JoinColumn(name = "state_id", referencedColumnName = "id")
-    private State state;
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
     
     public String getName() {
         return name;
@@ -28,17 +28,11 @@ public class Route extends AbstractEntity {
         this.name = name;
     }
 
-    public State getState() {
-        return state;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setLocation(Location location) {
+        this.location = location;
     }
-
-    @Override
-    public String toString() {
-        return "Route{" + "name=" + name + ", state=" + state + '}';
-    }
-    
 }
