@@ -9,14 +9,12 @@ import org.miles.service.dto.RouteDTO;
 public interface RouteMapper extends EntityMapper<RouteDTO, Route>{
 
     @Override
-    public RouteDTO toDto(Route entity);
+    RouteDTO toDto(Route entity);
 
     @Override
-    @Mapping(target="createdDate",ignore=true)
-    @Mapping(target="lastModifiedDate",ignore=true)
     @Mapping(target="id",ignore=true)
     @Mapping(target="location",ignore=true)
-    public Route toEntity(RouteDTO dto);
+    Route toEntity(RouteDTO dto);
     
     default Route fromId(Long id){
         if (id == null) {

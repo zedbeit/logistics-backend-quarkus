@@ -1,27 +1,16 @@
 package org.miles.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.miles.lang.utils.DateUtils;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import org.miles.lang.utils.DateUtils;
 
 @Entity
 @Table(name = "company")
@@ -68,11 +57,14 @@ public class Company implements Serializable {
     @JoinColumn(name = "id", referencedColumnName = "id")
     public UserAccount userAccount;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
-    public List<Location> locations;
-    
+    @ElementCollection(targetClass = String.class)
+    public List<String> routes = new ArrayList<>();
+
+    @ElementCollection(targetClass = String.class)
+    public List<String> locations = new ArrayList<>();
+
     @Column(name = "created_date", updatable = false)
-    @JsonIgnore 
+    @JsonIgnore
     public Instant createdDate = DateUtils.currentInstant();
     
     @Column(name = "last_modified_date")

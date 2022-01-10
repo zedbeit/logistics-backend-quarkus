@@ -1,25 +1,25 @@
 package org.miles.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "route")
-public class Route extends AbstractEntity {
+public class Route implements Serializable{
     private static final long serialVersionUID = 1L;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotNull
     @Size(max = 255)
     private String name;
-    
-    @ManyToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
-    private Location location;
-    
+
+    private String location;
+
     public String getName() {
         return name;
     }
@@ -28,11 +28,19 @@ public class Route extends AbstractEntity {
         this.name = name;
     }
 
-    public Location getLocation() {
-        return location;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public String getLocation() {
+        return this.location;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
