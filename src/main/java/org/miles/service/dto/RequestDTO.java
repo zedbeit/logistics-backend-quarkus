@@ -1,7 +1,7 @@
 package org.miles.service.dto;
 
 import java.math.BigDecimal;
-import org.miles.enumeration.RequestStatus;
+import org.miles.lang.enums.RequestStatus;
 
 public class RequestDTO {
     public RequestStatus status;

@@ -2,7 +2,7 @@ package org.miles.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.miles.domain.Route;
+import org.miles.lang.entity.Route;
 import org.miles.service.dto.RouteDTO;
 
 @Mapper(componentModel = "cdi")
