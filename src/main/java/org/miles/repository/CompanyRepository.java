@@ -1,16 +1,21 @@
 package org.miles.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import javax.enterprise.context.ApplicationScoped;
 import org.miles.domain.Company;
-import org.miles.enumeration.UserAccountStatus;
+
+import javax.enterprise.context.ApplicationScoped;
+import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class CompanyRepository implements PanacheRepository<Company> {
     public Optional<Company> findCompanyByName(String companyName){
         return find("companyName", companyName).firstResultOptional();  
     }
+
+    public List<Company> getAllCompanies() {
+        return find("SELECT c FROM Company c").list();
+    }
+
+    // fetch company by location e.g company where location is equal to 'kano'
 }

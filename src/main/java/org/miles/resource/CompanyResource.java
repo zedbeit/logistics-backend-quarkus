@@ -1,19 +1,15 @@
 package org.miles.resource;
 
+import org.miles.service.CompanyService;
+import org.miles.service.dto.CompanyDTO;
+
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
-import org.miles.service.CompanyService;
-
-@Path("api/v1/company")
+@Path("company")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CompanyResource {
@@ -21,17 +17,30 @@ public class CompanyResource {
     @Inject
     CompanyService companyService;
 
-    @GET
-    @Path("/add-location/{companyId}")
-    public Response addLocation(@PathParam("companyId") Long companyId, @QueryParam("location") String location){
-        companyService.addLocation(companyId, location);
+    @POST
+    @Path("add-location/{companyId}")
+    public Response addLocation(@PathParam("companyId") Long companyId,
+                            @QueryParam("location") String location){
+        companyService.addLocation(companyId,location);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("add-route/{companyId}")
+    public Response addRoute(@PathParam("companyId") Long companyId,
+                            @QueryParam("location") String location,
+                            @QueryParam("route") String route){
+        companyService.addRoute(companyId, location, route);        
         return Response.ok().build();
     }
 
     @GET
-    @Path("/add-route/{companyId}/{locationId}")
-    public Response addRoute(@PathParam("companyId") Long companyId, @PathParam("locationId") Long locationId, @QueryParam("route") String route){
-        companyService.addRoute(companyId, locationId, route);        
-        return Response.ok().build();
+    @Path("get-companies")
+    public Response getCompaniesWithMatchingRoute(
+            @QueryParam("location") String location,
+            @QueryParam("src") String src,
+            @QueryParam("dest") String dest){
+        List<CompanyDTO> companies = companyService.getCompaniesWithMatchingRoute(location, src, dest);
+        return Response.ok().entity(companies).build();
     }
 }
